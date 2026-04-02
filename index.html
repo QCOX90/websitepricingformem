@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Website Pricing Calculator</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+    }
+
+    .container {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+      flex-wrap: wrap;
+    }
+
+    .left, .right {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      flex: 1;
+      min-width: 300px;
+    }
+
+    h1 { margin-top: 0; }
+
+    .section {
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+    }
+
+    .option {
+      padding: 8px;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      margin-top: 8px;
+      cursor: pointer;
+    }
+
+    .option:hover {
+      background: #f1f5f9;
+    }
+
+    .total-box {
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+    }
+
+    .dark {
+      background: #0f172a;
+      color: white;
+    }
+
+    .light {
+      border: 1px solid #ddd;
+    }
+
+    button {
+      padding: 10px;
+      margin-top: 10px;
+      width: 100%;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .primary { background: #0f172a; color: white; }
+    .secondary { background: white; border: 1px solid #ddd; }
+
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="left">
+    <h1>Pricing Calculator</h1>
+
+    <div class="section">
+      <h3>Pages</h3>
+      <label><input type="radio" name="pages" value="300,60" checked> 1–3 pages</label><br>
+      <label><input type="radio" name="pages" value="450,75"> 4–6 pages</label><br>
+      <label><input type="radio" name="pages" value="600,90"> 7+ pages</label>
+    </div>
+
+    <div class="section">
+      <h3>Extras</h3>
+      <label><input type="checkbox" value="100,15"> Custom design</label><br>
+      <label><input type="checkbox" value="50,10"> Contact form</label><br>
+      <label><input type="checkbox" value="200,25"> Booking system</label><br>
+      <label><input type="checkbox" value="150,20"> SEO</label>
+    </div>
+
+  </div>
+
+  <div class="right">
+    <h2>Total</h2>
+
+    <div class="total-box dark">
+      <h3 id="oneTime">$300</h3>
+      <p>One-time</p>
+    </div>
+
+    <div class="total-box light">
+      <h3 id="monthly">$60/mo</h3>
+      <p>Monthly</p>
+    </div>
+
+    <button class="primary" onclick="copyText()">Copy Summary</button>
+    <button class="secondary" onclick="reset()">Reset</button>
+
+  </div>
+
+</div>
+
+<script>
+function update() {
+  let one = 0;
+  let month = 0;
+
+  document.querySelectorAll("input").forEach(el => {
+    if ((el.type === "radio" && el.checked) || (el.type === "checkbox" && el.checked)) {
+      let parts = el.value.split(",");
+      one += Number(parts[0]);
+      month += Number(parts[1]);
+    }
+  });
+
+  document.getElementById("oneTime").innerText = "$" + one;
+  document.getElementById("monthly").innerText = "$" + month + "/mo";
+}
+
+document.querySelectorAll("input").forEach(el => {
+  el.addEventListener("change", update);
+});
+
+function reset() {
+  document.querySelectorAll("input").forEach(el => {
+    if (el.type === "checkbox") el.checked = false;
+  });
+  document.querySelector("input[name='pages'][checked], input[name='pages']").checked = true;
+  update();
+}
+
+function copyText() {
+  let text = document.getElementById("oneTime").innerText + " / " + document.getElementById("monthly").innerText;
+  navigator.clipboard.writeText(text);
+  alert("Copied!");
+}
+
+update();
+</script>
+
+</body>
+</html>
